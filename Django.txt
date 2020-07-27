@@ -1,0 +1,42 @@
+Memnbuat Env
+
+-buat folder Tutorial Django di C
+-masuk ke folder Tutorial Django
+- buat environment
+	- python -m venv Env
+	- masuk ke folder Env\scripts\activate.bat
+	- selesai.
+
+instal Django
+-pip install Django==1.11.*
+-selesai.
+
+buat file requirements.txt
+- pip freeze > requirements.txt
+untuk pip untuk menginstall pip jika
+pip3 install -r requirements.txt
+
+buat project Django
+
+instal Django
+-pip install Django==1.11.*
+-selesai.
+
+- django-admin startproject mywebsite
+(mywebsite nama base projectnya)
+-selesai.
+
+jalankan server Django
+
+- masuke ke folder mywebsite
+- manage.py runserver
+- selesai.
+
+
+membuat app
+- python manage.py startapp blog
+- lalu run server
+- selesai.
+
+
+

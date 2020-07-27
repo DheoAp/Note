@@ -1,0 +1,103 @@
+=============== Querysets dengan Python Shell =============== 
+
+QuerySet API reference
+https://docs.djangoproject.com/en/3.0/ref/models/querysets/
+
+
+- create
+- all
+- get
+- filter
+- order_by
+- list
+
+**ctrl + L untuk membersihkan shell
+==============================================================
+1. Masuk ke Python Shell
+>> python manage.py shell
+>>> Form blog.models import Post
+	*unntuk mengimport Class Post yang ada di model.py
+
+2. Menambahkan data
+>>> Post.objects.create(judul="hello dunia",body="Hallo dunia, apa kabar?",kategori="blog")
+
+3. Mengambil semua data
+>>> Post.objects.all()
+atau
+>>> SemuaPost = Post.objects.all()
+>>> SemuaPost
+
+4. Mengambil data tertentu berdasarkan posisi database
+>>> Post.objects.all()[0]
+	*mengambil data pertama di database
+
+5. Menghapus data
+>>> Post.objects.all()[0].delete
+
+5.1 Mengupdate data
+>>> udpateData = Post.objects.all()[0]
+>>> updateData
+>>> updateData.judul = "Hallo Semua"
+>> updateData.save()
+
+6. Mengambil data dengan Id
+>>> Post.objects.get(id=1)
+atau
+>> Post.objects.get(judul="hello dunia")
+
+6.1. Mengambil berdasarkan kategori
+>>> SemuaPost = Post.objects.all()
+>>> SemuaPost
+coba looping dulu
+>>> for post in SemuaPost:
+	print(post.kategoti)
+
+**Get hanya hanya untuk satu data
+>>> SemuaPost.objects.get(kategori='blog')
+Output akan error
+
+6.2. Mengambil berdasarkan kategori gunakan filter
+>>> Post.object.filter(kategori='blog')
+
+6.3. Mengambil data berdasarkan kategori dengan exclude(kecuali)
+>>> SemuaPost = Post.objects.all()
+>>> SemuaPost.objects.exclude(kategori='gosip')
+	*menampilkan semua kategori kecuali kategori gosip
+atau 
+>>> BlogDanBerita = Post.objects.exclude(kategori='gosip)
+>>> for post in BlogDanBerita:
+	print(post.judul)
+Output: semua judul akan keluar, kecuali judul yang berkategori gosip
+
+
+7. Tidak mempedulika besar atau kecilnya kata(lowercase/uppercase)
+>>> Post.objects.get(judul__iexact="Hello dunia")
+bisa juga untuk filter
+>>>Post.objects.filter(judul__iexact="Hello dunia")
+
+
+8. Mengurutkan
+>>> Post.objects.order_by("judul")
+atau buat terbalik
+>>> Post.objects.order_by("-judul")
+
+9. Mengambil data agar bisa kita olah
+>>> Post.objects.all().values('id')
+atau
+>>> SemuaPost = Post.objects.all()
+>>> SemuaPost.values('id')
+
+Output: akan keluar idnya
+
+
+10. Merubah jadi list
+>>> SemuaPost.valuse_list("id")
+
+Output: semua id akan keluar dalam bentuk list
+
+
+
+
+
+   
+

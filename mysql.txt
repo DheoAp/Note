@@ -1,0 +1,205 @@
+mysql tidak bersifat casesensitive
+
+masuk ke mysql
+>> mysql -u root -p
+-p jika mysql mengunakan password
+
+tampilkan databases
+>> show databases;
+
+buat databases
+>> create database toko;
+>> show databases;
+
+untuk menghindari error
+>> create database if not exitst toko;
+
+menghapus databases
+>> drop database toko;
+>>show databases;
+
+memilih databases
+>> use toko
+
+melihat table yang ada di database toko
+>> show tables;
+
+membuat table
+>> create table satuan (
+	> satuanId int not null auto_increment,
+	> satuanNama varchar(30) not null,
+	> primary key (satuanId)
+	> );
+>> show tables;
+
+cek table yang kita buat
+>> describe satuan;
+
+
+membuat FOREIGN KEY
+- ON DELETE = jika DATA di table A di hapus maka DATA di table B yang sudah di REFERENCES akan terhapus juga.
+- ON DELETE RESTRICT = jika DATA di table B masih ada maka DATA di table A tidak akan bisa terhapus.
+- ON DELETE CASCADE jika DATA di table A di hapus maka DATA di table B terhapus juga.
+
+ON UPDATE = sama seperti ON DELETE
+
+- ON DELETE/UPDATE RESTRICT = DATA table toko A tidak bisa di hapus/update jika DATA table B masih ada DATA
+
+- ON DELETE/UPDATE CASCADE = DATA table toko A  di hapus/update maka DATA table B ikut terhapus/terupdate
+
+>>create table barang (
+	> barangId int not null auto_increment,
+	> barangNama varchar(50) not null,
+	> harga_beli int not null,
+	> harga_jual int not null,
+	> supplier_id int,
+	> satuan_id int,
+	> index (supplier_id),
+	> index (satuan_id),
+	> foreign key (supplier_id) references supplier (supplierId)
+	> on delete restrict on update cascade,
+	> foreign key (satuan_id) references satuan (satuanId)
+	> on delete restrict on update cascade,
+	> primary key (barangId)
+	> );
+
+
+menghapus table
+>> drop table barang
+>> show tables;
+
+MERUBAH STRUKTUR PADA TABLE
+menambahkan column pada table barang
+>> alter table barang add column deskripsi text;
+>> describe barang
+
+hapus column di table barang
+>> alter table barang drop column deskripsi
+
+menambahkan column sesudah nama column pada table barang
+>> alter table barang add column deskripsi text after barangNama
+
+melihat/memilih isi data pada column pada table satuan
+>>select * from satuan;
+
+men insert data ke column satuan
+>> insert into satuan values(null,"pcs");
+(cara ke dua)
+>> insert into satuan (satuanNama) values("kg");
+
+insert data lebih dari satu
+>> insert into satuan (satuanNama) values('liter'),('buah');
+
+insert data lebih dari 2 column
+>> insert into satuan (satuanNama,jumlah) values ('liter',2),('buah',4);
+
+update data barang
+>>update barang set `harga_bel` = 4500 where barangId = 1;
+
+delete data satuan
+>> delete from satuan where satuanId = 4;
+
+menampilkan column tertentu saja
+>> select namaBarang,jumlahBarang From Barang;
+
+menbatasi jumlah data 
+>> select namaBarang,jumlahBarang from Barang limit 10;
+
+merubah(men alias) nama column
+>> select namaBarang as nama_barang, jumlahBarang as jumlah_barang from Barang limit 10;
+
+mengambil 10 data ke bawah dan tampil 5 data
+>> select namaBarang,jumlahBarang from Barang limit 10,5;
+
+
+
+WHERE, untuk memfilter data data yang kita ingin kan,
+>> select productCode,productName,productLine,buyPrice from products
+	>> where productLine = 'Motorcycles';
+
+!= , tidak menampilkan product Motorcycles di productLine
+>> select productCode,productName,productLine,buyPrice from products
+	>> where productLine != 'Motorcycles';
+
+< ,menampilkan product buyPrice nya kurang dari 50
+>> select productCode,productName,productLine,buyPrice from products
+	>> where buyPrice < 50;
+
+AND ,melakukan 2 kondisi, buyPrice nya kurang dari 50 dan menampilkan product Motorcycles
+>> select productCode,productName,productLine,buyPrice from products
+	>> where buyPrice < 50 and productLine = 'Motorcycles';
+
+
+OR menampilkan buyPrice lebih dari 50 tapi tetap menampilkan produk Planes
+>> select productCode,productName,productLine,buyPrice from products
+	>> where buyPrice < 50 or productLine = 'Planes';
+
+IN , menampilkan 2(atau lebih) productLine / kategori produk
+>> select productCode,productName,productLine,buyPrice from products
+	>> where productLine in ('Planes','Ships');
+
+BETWEEN ,menampilkan buyPrice nya di antara 50 dan 70
+>> select productCode,productName,productLine,buyPrice from products
+	>> where buyPrice between 50 AND 70;
+
+>> select productCode,productName,productLine,buyPrice from products
+	>> where buyPrice between 50 AND 70 AND productLine = 'Ships';
+
+LIKE LIKE UNDERSCORE , menfilter data berdasarkan pola pola tertentu( mencari nama dengan awalan huruf a )
+
+>> select firstName from employees where firstName like 'A%';
+
+( mencari nama dengan akhirnya huruf a )
+>> select lastName from employeess where lastName like '%A';
+
+( mencari di antara nama )
+
+>> select firstName form employess where firstName like '%li%';
+
+(mencari nama 3 hurur yang diawali huruf T dan di akhiri M)
+>> select firstName form employess where firstName like '%T_M%';
+
+>> select firstName form employess where firstName NOT like '%T_M%';
+
+ORDER mengurutkan hasil query
+>> select productLine,productName,buyPrice from products order by productLine;
+
+DESC mengurutkan dari besar ke kecil
+>> select productLine,productName,buyPrice from products order by productLine desc;
+
+multipel order (ASC = dari kecil ke besar)
+>> select productLine,productName,buyPrice from products order by productLine ASC, productName;
+
+melihat msrp atau harga jual yang di rekomendasinnya berapa
+
+melihat keuntungannya berapa (harga jual - harga beli)
+>> select productLine,productName,MSRP-buyPrice as untung from products;
+
+melihat keuntungan yang paling kecil ke paling besar
+>> select productLine,productName,MSRP-buyPrice as untung from products order by MSRP-buyPrice;
+atau
+>> select productLine,productName,MSRP-buyPrice as untung from products order by untung;
+
+melihat keuntungan yang paling besar ke paling kecil
+>> select productLine,productName,MSRP-buyPrice as untung from products order by untung desc;
+
+FIELD custom order
+>> select productLine,productName,MSRP-buyPrice as untung from products order by field(productLine,'Ships','Planes','Vintage Cars','Truck and Buses','Motorcycles','Train','Classic Cars'); 
+
+
+JOIN di lakukan ketika membutuhkan informasi yang berasal dari 2 tabel atau lebih
+menampilkan nama pegawai dan kota(bisa juga jika nama kedua column berbeda(foreign key primary keynya)
+>> select firstName,city from employees inner join offices on employees.officeCode = offices.officeCode;
+
+jika nama kedua column sama (foreign key primary keynya)
+>> select firstName,city from employees inner join offices using(officeCode);
+
+mengabungkan 2 string atau dua data
+>>select concat(firstName," ",lastName) as fullName,customerName from employees inner join
+    -> customers on employees.employeeNumber = customers.salesRepEmployeeNumber limit 5;
+
+
+menampilkan semua data termasuk data yang tidak memiliki nilai
+>> select customerName,orderNumber from customers left join orders using(customerNumber);
+
+
